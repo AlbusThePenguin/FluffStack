@@ -7,6 +7,14 @@ services:
       - "5000:5000"
     networks:
       - cloud-net
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=fluff
+      - DB_PASSWORD=fluffpass
+      - DB_NAME=fluffdb
+    depends_on:
+      - db
 
   web2:
     build: ./apps/web2
@@ -15,6 +23,29 @@ services:
       - "5001:5001"
     networks:
       - cloud-net
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=fluff
+      - DB_PASSWORD=fluffpass
+      - DB_NAME=fluffdb
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    container_name: db
+    environment:
+      POSTGRES_USER: fluff
+      POSTGRES_PASSWORD: fluffpass
+      POSTGRES_DB: fluffdb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - cloud-net
 
 networks:
   cloud-net:
+
+volumes:
+  db_data:
